@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simia Medi Spa | سيميا الدولية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#C9A96E;
+  --gold-light:#E8D5B0;
+  --gold-dark:#8B6B3D;
+  --deep:#0A0A0F;
+  --dark:#111118;
+  --mid:#1A1A24;
+  --surface:#22222F;
+  --text:#F5F0E8;
+  --muted:#9A9080;
+  --white:#FDFBF7;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--deep);color:var(--text);font-family:'Jost',sans-serif;font-weight:300;overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 4rem;display:flex;justify-content:space-between;align-items:center;transition:all 0.5s;}
+nav.scrolled{background:rgba(10,10,15,0.92);backdrop-filter:blur(16px);padding:1rem 4rem;border-bottom:1px solid rgba(201,169,110,0.12);}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;letter-spacing:0.12em;color:var(--gold);}
+.logo span{font-style:italic;color:var(--text);}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.78rem;letter-spacing:0.18em;text-transform:uppercase;transition:color 0.3s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-cta{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:0.6rem 1.6rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.4s;}
+.nav-cta:hover{background:var(--gold);color:var(--deep);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+.hamburger span{display:block;width:24px;height:1px;background:var(--gold);transition:all 0.3s;}
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(10,10,15,0.97);z-index:99;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.5rem;font-family:'Cormorant Garamond',serif;letter-spacing:0.1em;}
+
+/* HERO */
+.hero{position:relative;height:100vh;min-height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-canvas{position:absolute;inset:0;z-index:0;}
+canvas{display:block;width:100%;height:100%;}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(10,10,15,0.3) 0%,rgba(10,10,15,0.75) 100%);z-index:1;}
+.hero-content{position:relative;z-index:2;text-align:center;padding:2rem;}
+.hero-eyebrow{font-size:0.7rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:1.8rem;opacity:0;animation:fadeUp 1s 0.3s forwards;}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,7rem);font-weight:300;line-height:1.05;letter-spacing:0.04em;color:var(--white);margin-bottom:0.4rem;opacity:0;animation:fadeUp 1s 0.6s forwards;}
+.hero-title em{font-style:italic;color:var(--gold);}
+.hero-subtitle{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,2.5vw,1.5rem);font-style:italic;color:var(--muted);letter-spacing:0.1em;margin-bottom:3rem;opacity:0;animation:fadeUp 1s 0.9s forwards;}
+.hero-actions{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp 1s 1.2s forwards;}
+.btn-primary{background:var(--gold);color:var(--deep);padding:0.9rem 2.8rem;font-size:0.75rem;letter-spacing:0.22em;text-transform:uppercase;border:none;cursor:pointer;font-family:'Jost',sans-serif;transition:all 0.4s;}
+.btn-primary:hover{background:var(--gold-light);transform:translateY(-2px);}
+.btn-outline{background:transparent;color:var(--text);padding:0.9rem 2.8rem;font-size:0.75rem;letter-spacing:0.22em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.25);cursor:pointer;font-family:'Jost',sans-serif;transition:all 0.4s;}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:0.6rem;opacity:0;animation:fadeUp 1s 1.6s forwards;}
+.scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s infinite;}
+.scroll-text{font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);}
+
+/* MARQUEE */
+.marquee-bar{background:var(--mid);border-top:1px solid rgba(201,169,110,0.15);border-bottom:1px solid rgba(201,169,110,0.15);padding:0.9rem 0;overflow:hidden;white-space:nowrap;}
+.marquee-inner{display:inline-flex;animation:marquee 25s linear infinite;}
+.marquee-item{font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);padding:0 3rem;}
+.marquee-dot{color:var(--gold);margin:0 0.5rem;}
+
+/* SECTION BASICS */
+section{padding:8rem 2rem;}
+.section-eyebrow{font-size:0.68rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.8rem);font-weight:300;line-height:1.1;color:var(--white);}
+.section-title em{font-style:italic;color:var(--gold);}
+.section-body{color:var(--muted);font-size:0.92rem;line-height:1.9;max-width:480px;}
+.divider{width:60px;height:1px;background:var(--gold);margin:2rem 0;}
+
+/* ABOUT */
+.about{background:var(--dark);}
+.about-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:center;}
+.about-visual{position:relative;}
+.about-3d-box{width:100%;aspect-ratio:4/5;position:relative;perspective:1000px;}
+.cube-scene{width:80%;margin:0 auto;aspect-ratio:1;position:relative;transform-style:preserve-3d;animation:rotateCube 20s linear infinite;}
+.cube-face{position:absolute;width:100%;height:100%;border:1px solid rgba(201,169,110,0.2);display:flex;align-items:center;justify-content:center;}
+.face-front{background:rgba(201,169,110,0.04);transform:translateZ(120px);}
+.face-back{background:rgba(201,169,110,0.02);transform:rotateY(180deg) translateZ(120px);}
+.face-left{background:rgba(201,169,110,0.03);transform:rotateY(-90deg) translateZ(120px);}
+.face-right{background:rgba(201,169,110,0.03);transform:rotateY(90deg) translateZ(120px);}
+.face-top{background:rgba(201,169,110,0.05);transform:rotateX(90deg) translateZ(120px);}
+.face-bottom{background:rgba(201,169,110,0.01);transform:rotateX(-90deg) translateZ(120px);}
+.face-symbol{font-family:'Cormorant Garamond',serif;font-size:4rem;color:var(--gold);opacity:0.5;}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:3rem;}
+.stat{border-left:1px solid rgba(201,169,110,0.3);padding-left:1.5rem;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:300;color:var(--gold);line-height:1;}
+.stat-label{font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-top:0.3rem;}
+.rating-badge{position:absolute;bottom:2rem;right:-1rem;background:var(--surface);border:1px solid rgba(201,169,110,0.2);padding:1rem 1.5rem;display:flex;align-items:center;gap:0.8rem;}
+.rating-num{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold);}
+.rating-info{font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;}
+.stars{color:var(--gold);font-size:0.8rem;letter-spacing:2px;}
+
+/* SERVICES */
+.services{background:var(--deep);}
+.services-header{max-width:1200px;margin:0 auto 5rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:2rem;}
+.services-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.service-card{background:var(--mid);padding:3rem 2.5rem;position:relative;overflow:hidden;cursor:pointer;transition:all 0.5s;group:true;}
+.service-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,169,110,0.06) 0%,transparent 60%);opacity:0;transition:opacity 0.5s;}
+.service-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:linear-gradient(to right,var(--gold),transparent);transform:scaleX(0);transform-origin:left;transition:transform 0.5s;}
+.service-card:hover::before{opacity:1;}
+.service-card:hover::after{transform:scaleX(1);}
+.service-card:hover{background:var(--surface);transform:translateY(-4px);}
+.service-icon{width:48px;height:48px;margin-bottom:2rem;position:relative;}
+.icon-svg{width:100%;height:100%;stroke:var(--gold);fill:none;stroke-width:1;}
+.service-num{position:absolute;top:2rem;right:2rem;font-family:'Cormorant Garamond',serif;font-size:0.85rem;color:rgba(201,169,110,0.25);letter-spacing:0.1em;}
+.service-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:var(--white);margin-bottom:0.8rem;}
+.service-desc{font-size:0.82rem;color:var(--muted);line-height:1.8;margin-bottom:1.5rem;}
+.service-price{font-size:0.78rem;letter-spacing:0.15em;color:var(--gold);text-transform:uppercase;}
+.service-arrow{position:absolute;bottom:2.5rem;right:2.5rem;color:var(--gold);opacity:0;transition:all 0.4s;font-size:1.2rem;}
+.service-card:hover .service-arrow{opacity:1;transform:translateX(4px);}
+
+/* EXPERIENCE */
+.experience{background:var(--dark);overflow:hidden;}
+.experience-inner{max-width:1200px;margin:0 auto;}
+.exp-header{margin-bottom:5rem;}
+.exp-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.exp-card{position:relative;overflow:hidden;aspect-ratio:3/4;cursor:pointer;}
+.exp-card-bg{position:absolute;inset:0;transition:transform 0.7s ease;}
+.exp-card:hover .exp-card-bg{transform:scale(1.05);}
+.exp-gradient{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,15,0.95) 30%,rgba(10,10,15,0.2) 100%);}
+.exp-content{position:absolute;bottom:0;left:0;right:0;padding:2.5rem 2rem;}
+.exp-tag{font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;}
+.exp-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--white);margin-bottom:0.5rem;}
+.exp-sub{font-size:0.78rem;color:var(--muted);}
+.pattern-bg{width:100%;height:100%;position:absolute;inset:0;}
+
+/* PROCESS */
+.process{background:var(--deep);}
+.process-inner{max-width:1200px;margin:0 auto;}
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:5rem;position:relative;}
+.process-steps::before{content:'';position:absolute;top:28px;left:12%;right:12%;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);opacity:0.3;}
+.step{text-align:center;padding:0 1.5rem;}
+.step-num{width:56px;height:56px;border:1px solid rgba(201,169,110,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);position:relative;background:var(--deep);}
+.step-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--white);margin-bottom:0.6rem;}
+.step-desc{font-size:0.78rem;color:var(--muted);line-height:1.8;}
+
+/* TESTIMONIALS */
+.testimonials{background:var(--mid);}
+.testimonials-inner{max-width:1200px;margin:0 auto;}
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:4rem;}
+.review-card{background:var(--dark);padding:3rem 2.5rem;position:relative;}
+.review-card::before{content:'\201C';font-family:'Cormorant Garamond',serif;font-size:5rem;color:var(--gold);opacity:0.15;position:absolute;top:1rem;left:2rem;line-height:1;}
+.review-stars{color:var(--gold);font-size:0.7rem;letter-spacing:3px;margin-bottom:1.5rem;}
+.review-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:var(--text);line-height:1.8;margin-bottom:2rem;}
+.reviewer{display:flex;align-items:center;gap:1rem;}
+.reviewer-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold-dark),var(--gold));display:flex;align-items:center;justify-content:center;font-size:0.85rem;color:var(--deep);font-family:'Cormorant Garamond',serif;}
+.reviewer-name{font-size:0.82rem;color:var(--text);letter-spacing:0.05em;}
+.reviewer-date{font-size:0.72rem;color:var(--muted);}
+
+/* HOURS + LOCATION */
+.info-section{background:var(--dark);}
+.info-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:start;}
+.info-box{background:var(--surface);padding:3rem;border:1px solid rgba(201,169,110,0.1);}
+.info-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--white);margin-bottom:2rem;}
+.hours-row{display:flex;justify-content:space-between;padding:0.9rem 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:0.82rem;}
+.hours-day{color:var(--muted);letter-spacing:0.08em;}
+.hours-time{color:var(--text);}
+.hours-closed{color:rgba(255,255,255,0.25);}
+.contact-items{display:flex;flex-direction:column;gap:1.5rem;}
+.contact-item{display:flex;align-items:flex-start;gap:1rem;}
+.contact-icon{width:36px;height:36px;border:1px solid rgba(201,169,110,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.contact-icon svg{width:16px;height:16px;stroke:var(--gold);fill:none;stroke-width:1.5;}
+.contact-label{font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:0.2rem;}
+.contact-value{font-size:0.88rem;color:var(--text);}
+
+/* CTA */
+.cta-section{background:var(--deep);padding:10rem 2rem;text-align:center;position:relative;overflow:hidden;}
+.cta-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.cta-ring{border-radius:50%;border:1px solid rgba(201,169,110,0.06);position:absolute;}
+.cta-content{position:relative;z-index:1;}
+.cta-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,5vw,5rem);font-weight:300;color:var(--white);margin-bottom:1.5rem;line-height:1.1;}
+.cta-title em{font-style:italic;color:var(--gold);}
+.cta-sub{color:var(--muted);font-size:0.88rem;letter-spacing:0.1em;margin-bottom:3rem;}
+.phone-link{display:inline-block;font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gold);letter-spacing:0.05em;text-decoration:none;margin-bottom:2.5rem;}
+
+/* FOOTER */
+footer{background:var(--mid);border-top:1px solid rgba(201,169,110,0.12);padding:3rem 2rem;}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);letter-spacing:0.1em;}
+.footer-copy{font-size:0.7rem;color:var(--muted);letter-spacing:0.12em;}
+.footer-tagline{font-size:0.7rem;color:var(--muted);font-style:italic;}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+@keyframes scrollPulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);};}
+@keyframes rotateCube{from{transform:rotateX(10deg) rotateY(0deg);}to{transform:rotateX(10deg) rotateY(360deg);}}
+@keyframes floatGlow{0%,100%{transform:scale(1);opacity:0.06;}50%{transform:scale(1.1);opacity:0.1;}}
+
+.reveal{opacity:0;transform:translateY(40px);transition:all 0.9s cubic-bezier(0.22,1,0.36,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:1.2rem 1.5rem;}
+  nav.scrolled{padding:0.8rem 1.5rem;}
+  .nav-links,.nav-cta{display:none;}
+  .hamburger{display:flex;}
+  section{padding:5rem 1.5rem;}
+  .about-inner{grid-template-columns:1fr;gap:4rem;}
+  .about-3d-box{aspect-ratio:1;}
+  .about-stats{grid-template-columns:repeat(2,1fr);}
+  .services-grid{grid-template-columns:1fr;}
+  .exp-cards{grid-template-columns:1fr;}
+  .exp-card{aspect-ratio:16/9;}
+  .process-steps{grid-template-columns:1fr 1fr;gap:3rem;}
+  .process-steps::before{display:none;}
+  .testimonials-grid{grid-template-columns:1fr;}
+  .info-inner{grid-template-columns:1fr;gap:3rem;}
+  .services-header{flex-direction:column;align-items:flex-start;}
+  .footer-inner{flex-direction:column;text-align:center;}
+  .hero-title{font-size:clamp(2.5rem,10vw,4rem);}
+  .rating-badge{right:0;bottom:0;}
+}
+@media(max-width:600px){
+  .about-stats{grid-template-columns:1fr;}
+  .process-steps{grid-template-columns:1fr;}
+  .hero-actions{flex-direction:column;align-items:center;}
+  .btn-primary,.btn-outline{width:220px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo">SIMIA <span>Medi Spa</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Book Now</button>
+  <button class="hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#services" onclick="closeMobile()">Services</a>
+  <a href="#experience" onclick="closeMobile()">Experience</a>
+  <a href="#contact" onclick="closeMobile()">Contact & Book</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-canvas"><canvas id="heroCanvas"></canvas></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Muscat, Oman · Est. Medical Spa</div>
+    <h1 class="hero-title">Where Beauty<br>Meets <em>Science</em></h1>
+    <p class="hero-subtitle">سيميا الدولية · A sanctuary of transformation</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Explore Services</button>
+      <button class="btn-outline" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Book a Session</button>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span class="scroll-text">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-inner" id="marqueeInner">
+    <span class="marquee-item">Laser Hair Removal<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">LPG Body Contouring<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Medical Facials<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Skin Rejuvenation<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Cold Laser Therapy<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Deep Cleansing<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Body Laser<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Skin Consultation<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Laser Hair Removal<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">LPG Body Contouring<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Medical Facials<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Skin Rejuvenation<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Cold Laser Therapy<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Deep Cleansing<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Body Laser<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Skin Consultation<span class="marquee-dot">◆</span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-visual reveal">
+      <div class="about-3d-box" style="perspective:800px;">
+        <div class="cube-scene" style="width:240px;height:240px;margin:60px auto;transform-style:preserve-3d;animation:rotateCube 20s linear infinite;position:relative;">
+          <div class="cube-face face-front" style="position:absolute;width:240px;height:240px;transform:translateZ(120px);"><span class="face-symbol">✦</span></div>
+          <div class="cube-face face-back" style="position:absolute;width:240px;height:240px;transform:rotateY(180deg) translateZ(120px);"><span class="face-symbol" style="font-size:2rem;font-family:'Jost',sans-serif;letter-spacing:0.1em;opacity:0.4;color:var(--gold);">سيميا</span></div>
+          <div class="cube-face face-left" style="position:absolute;width:240px;height:240px;transform:rotateY(-90deg) translateZ(120px);"></div>
+          <div class="cube-face face-right" style="position:absolute;width:240px;height:240px;transform:rotateY(90deg) translateZ(120px);"></div>
+          <div class="cube-face face-top" style="position:absolute;width:240px;height:240px;transform:rotateX(90deg) translateZ(120px);"></div>
+          <div class="cube-face face-bottom" style="position:absolute;width:240px;height:240px;transform:rotateX(-90deg) translateZ(120px);"></div>
+        </div>
+        <div class="rating-badge">
+          <div class="rating-num">4.8</div>
+          <div class="rating-info">
+            <div class="stars">★★★★★</div>
+            <div style="font-size:0.68rem;color:var(--muted);margin-top:2px;">Guest Rating</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-stats">
+        <div class="stat"><div class="stat-num">40+</div><div class="stat-label">Services</div></div>
+        <div class="stat"><div class="stat-num">6</div><div class="stat-label">Expert Specialists</div></div>
+        <div class="stat"><div class="stat-num">10h</div><div class="stat-label">Daily Hours</div></div>
+        <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Client Focused</div></div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="section-eyebrow">Our Philosophy</div>
+      <h2 class="section-title">Curated for<br>your <em>wellbeing</em></h2>
+      <div class="divider"></div>
+      <p class="section-body">At Simia Medi Spa, every detail is thoughtfully curated to provide a soothing and luxurious escape. The serene ambiance invites you to unwind, allowing a sense of calm to take over.</p>
+      <p class="section-body" style="margin-top:1.2rem;">Here, you will experience a harmonious balance of relaxation and rejuvenation, with a focus on enhancing both your inner and outer well-being. Whether you seek tranquility or transformation, Simia offers an atmosphere where comfort and care converge.</p>
+      <div style="margin-top:3rem;display:flex;gap:3rem;">
+        <div>
+          <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem;">Location</div>
+          <div style="font-size:0.88rem;color:var(--text);">18th November Street, Al Azaibah<br>Muscat, Oman</div>
+        </div>
+        <div>
+          <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem;">Phone</div>
+          <div style="font-size:0.88rem;color:var(--gold);">+968 24 492333</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-header reveal">
+    <div>
+      <div class="section-eyebrow">What We Offer</div>
+      <h2 class="section-title">Our <em>Treatments</em></h2>
+    </div>
+    <p class="section-body" style="max-width:320px;font-size:0.82rem;">Precision-driven medical aesthetics combined with timeless spa ritual. 40+ treatments available.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-num">01</div>
+      <div class="service-icon">
+        <svg class="icon-svg" viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M24 6v36M6 24h36"/><circle cx="24" cy="24" r="6"/></svg>
+      </div>
+      <div class="service-name">Full Face Laser</div>
+      <p class="service-desc">Precision laser hair removal for the full face. Advanced technology, lasting results in as little as 20 minutes.</p>
+      <div class="service-price">From OMR 45 · 20 min</div>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">02</div>
+      <div class="service-icon">
+        <svg class="icon-svg" viewBox="0 0 48 48"><ellipse cx="24" cy="24" rx="10" ry="18"/><path d="M14 24c0-5.5 4.5-10 10-10s10 4.5 10 10"/><path d="M8 16c3-3 7-5 16-5s13 2 16 5"/></svg>
+      </div>
+      <div class="service-name">Full Body Laser</div>
+      <p class="service-desc">Comprehensive full-body laser treatment. Smooth, permanent hair reduction performed by certified laser technicians.</p>
+      <div class="service-price">From OMR 149 · 80 min</div>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">03</div>
+      <div class="service-icon">
+        <svg class="icon-svg" viewBox="0 0 48 48"><path d="M12 36c0-6.6 5.4-12 12-12s12 5.4 12 12"/><circle cx="24" cy="18" r="8"/><path d="M8 42h32"/></svg>
+      </div>
+      <div class="service-name">Medical Facials</div>
+      <p class="service-desc">Deep double cleansing facials tailored to your skin type. Clinical-grade formulations, visible results from the first session.</p>
+      <div class="service-price">From OMR 28 · 60 min</div>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">04</div>
+      <div class="service-icon">
+        <svg class="icon-svg" viewBox="0 0 48 48"><path d="M24 8c0 0-12 8-12 18a12 12 0 0024 0c0-10-12-18-12-18z"/><path d="M18 30c0 3.3 2.7 6 6 6"/></svg>
+      </div>
+      <div class="service-name">Cold Laser Therapy</div>
+      <p class="service-desc">Non-invasive cold laser hair removal sessions with zero downtime. Clinically proven for all skin types.</p>
+      <div class="service-price">Per Session Available</div>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">05</div>
+      <div class="service-icon">
+        <svg class="icon-svg" viewBox="0 0 48 48"><rect x="8" y="12" width="32" height="24" rx="4"/><path d="M16 20h16M16 28h10"/><circle cx="36" cy="20" r="3"/></svg>
+      </div>
+      <div class="service-name">LPG Body Contouring</div>
+      <p class="service-desc">LPG Endermologie — the gold standard in non-surgical body sculpting. Firm, smooth and reshape your silhouette.</p>
+      <div class="service-price">Per Session Available</div>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">06</div>
+      <div class="service-icon">
+        <svg class="icon-svg" viewBox="0 0 48 48"><path d="M10 24 Q24 8 38 24 Q24 40 10 24z"/><circle cx="24" cy="24" r="5"/><path d="M24 14v4M24 30v4M14 24h4M30 24h4"/></svg>
+      </div>
+      <div class="service-name">Skin Consultation</div>
+      <p class="service-desc">Begin your journey with a personalised skin analysis and treatment plan curated by our specialists.</p>
+      <div class="service-price">Complimentary</div>
+      <div class="service-arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="experience" id="experience">
+  <div class="experience-inner">
+    <div class="exp-header reveal">
+      <div class="section-eyebrow">The Simia Experience</div>
+      <h2 class="section-title">A Journey of<br><em>Transformation</em></h2>
+    </div>
+    <div class="exp-cards">
+      <div class="exp-card reveal">
+        <div class="exp-card-bg" style="position:absolute;inset:0;">
+          <svg width="100%" height="100%" viewBox="0 0 400 530" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;">
+            <defs><radialGradient id="g1" cx="50%" cy="30%" r="70%"><stop offset="0%" stop-color="#3D2B1F"/><stop offset="100%" stop-color="#0A0A0F"/></radialGradient></defs>
+            <rect width="400" height="530" fill="url(#g1)"/>
+            <circle cx="200" cy="160" r="120" fill="none" stroke="#C9A96E" stroke-width="0.5" opacity="0.2"/>
+            <circle cx="200" cy="160" r="80" fill="none" stroke="#C9A96E" stroke-width="0.5" opacity="0.3"/>
+            <circle cx="200" cy="160" r="40" fill="#C9A96E" opacity="0.08"/>
+            <path d="M200 80 L215 135 L270 135 L227 165 L242 220 L200 190 L158 220 L173 165 L130 135 L185 135 Z" fill="#C9A96E" opacity="0.15"/>
+          </svg>
+        </div>
+        <div class="exp-gradient"></div>
+        <div class="exp-content">
+          <div class="exp-tag">Precision</div>
+          <div class="exp-title">Medical-Grade Technology</div>
+          <div class="exp-sub">State-of-the-art equipment for superior outcomes</div>
+        </div>
+      </div>
+      <div class="exp-card reveal" style="margin-top:3rem;">
+        <div class="exp-card-bg" style="position:absolute;inset:0;">
+          <svg width="100%" height="100%" viewBox="0 0 400 530" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;">
+            <defs><radialGradient id="g2" cx="50%" cy="50%" r="70%"><stop offset="0%" stop-color="#1A2535"/><stop offset="100%" stop-color="#0A0A0F"/></radialGradient></defs>
+            <rect width="400" height="530" fill="url(#g2)"/>
+            <path d="M100,100 Q200,20 300,100 Q380,200 300,300 Q200,380 100,300 Q20,200 100,100Z" fill="none" stroke="#C9A96E" stroke-width="0.5" opacity="0.2"/>
+            <line x1="200" y1="50" x2="200" y2="480" stroke="#C9A96E" stroke-width="0.3" opacity="0.15"/>
+            <line x1="50" y1="265" x2="350" y2="265" stroke="#C9A96E" stroke-width="0.3" opacity="0.15"/>
+            <circle cx="200" cy="265" r="60" fill="none" stroke="#C9A96E" stroke-width="0.5" opacity="0.25"/>
+          </svg>
+        </div>
+        <div class="exp-gradient"></div>
+        <div class="exp-content">
+          <div class="exp-tag">Serenity</div>
+          <div class="exp-title">Tranquil Sanctuary</div>
+          <div class="exp-sub">An atmosphere crafted for total relaxation</div>
+        </div>
+      </div>
+      <div class="exp-card reveal">
+        <div class="exp-card-bg" style="position:absolute;inset:0;">
+          <svg width="100%" height="100%" viewBox="0 0 400 530" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;">
+            <defs><radialGradient id="g3" cx="50%" cy="70%" r="70%"><stop offset="0%" stop-color="#1F1A10"/><stop offset="100%" stop-color="#0A0A0F"/></radialGradient></defs>
+            <rect width="400" height="530" fill="url(#g3)"/>
+            <polygon points="200,80 260,200 380,200 285,275 320,400 200,325 80,400 115,275 20,200 140,200" fill="none" stroke="#C9A96E" stroke-width="0.5" opacity="0.2"/>
+            <circle cx="200" cy="265" r="30" fill="#C9A96E" opacity="0.1"/>
+            <circle cx="200" cy="265" r="80" fill="none" stroke="#C9A96E" stroke-width="0.3" stroke-dasharray="4 8" opacity="0.2"/>
+          </svg>
+        </div>
+        <div class="exp-gradient"></div>
+        <div class="exp-content">
+          <div class="exp-tag">Excellence</div>
+          <div class="exp-title">Expert Specialists</div>
+          <div class="exp-sub">Certified skin specialists and laser technicians</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process">
+  <div class="process-inner">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto;">
+      <div class="section-eyebrow">How It Works</div>
+      <h2 class="section-title">Your path to <em>radiance</em></h2>
+    </div>
+    <div class="process-steps reveal">
+      <div class="step">
+        <div class="step-num">I</div>
+        <div class="step-name">Consultation</div>
+        <p class="step-desc">A thorough skin assessment to understand your unique needs and craft a personalised treatment plan.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">II</div>
+        <div class="step-name">Customisation</div>
+        <p class="step-desc">We select the ideal treatments and protocols from our 40+ menu to suit your skin type and goals.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">III</div>
+        <div class="step-name">Treatment</div>
+        <p class="step-desc">Experience precise, clinical care in our serene environment using the latest medical spa technology.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">IV</div>
+        <div class="step-name">Aftercare</div>
+        <p class="step-desc">Ongoing guidance and follow-up to maximise results and maintain your luminous, transformed skin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <div class="reveal" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:2rem;">
+      <div>
+        <div class="section-eyebrow">Guest Words</div>
+        <h2 class="section-title">What our clients <em>say</em></h2>
+      </div>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:3rem;color:var(--gold);">4.8</div>
+        <div><div class="stars" style="font-size:0.9rem;letter-spacing:3px;color:var(--gold);">★★★★★</div><div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">Based on verified reviews</div></div>
+      </div>
+    </div>
+    <div class="testimonials-grid">
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Had a very good facial. Sybele was patient and kind with explaining the process and better treatment for my skin. Highly recommended."</p>
+        <div class="reviewer"><div class="reviewer-avatar">NK</div><div><div class="reviewer-name">Natasha K.</div><div class="reviewer-date">October 2022</div></div></div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"An absolute sanctuary. The team is professional, knowledgeable and genuinely cares about your results. I leave feeling completely transformed every single time."</p>
+        <div class="reviewer"><div class="reviewer-avatar">ZQ</div><div><div class="reviewer-name">Zainab Q.</div><div class="reviewer-date">January 2024</div></div></div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"The ambiance alone is worth the visit. The laser treatments are precise and the results speak for themselves. Simia is truly one of Muscat's best."</p>
+        <div class="reviewer"><div class="reviewer-avatar">SA</div><div><div class="reviewer-name">Sheikha A.</div><div class="reviewer-date">November 2022</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INFO -->
+<section class="info-section" id="contact">
+  <div class="info-inner">
+    <div class="reveal">
+      <div class="section-eyebrow">Opening Hours</div>
+      <h2 class="section-title" style="margin-bottom:2.5rem;">When to <em>visit</em></h2>
+      <div class="info-box">
+        <div class="hours-row"><span class="hours-day">Monday</span><span class="hours-time">10:00 AM — 8:00 PM</span></div>
+        <div class="hours-row"><span class="hours-day">Tuesday</span><span class="hours-time">10:00 AM — 8:00 PM</span></div>
+        <div class="hours-row"><span class="hours-day">Wednesday</span><span class="hours-time">10:00 AM — 8:00 PM</span></div>
+        <div class="hours-row"><span class="hours-day">Thursday</span><span class="hours-time">10:00 AM — 8:00 PM</span></div>
+        <div class="hours-row"><span class="hours-day">Friday</span><span class="hours-closed">Closed</span></div>
+        <div class="hours-row"><span class="hours-day">Saturday</span><span class="hours-time">10:00 AM — 8:00 PM</span></div>
+        <div class="hours-row" style="border-bottom:none;"><span class="hours-day">Sunday</span><span class="hours-time">10:00 AM — 8:00 PM</span></div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="section-eyebrow">Get in Touch</div>
+      <h2 class="section-title" style="margin-bottom:2.5rem;">Find <em>us</em></h2>
+      <div class="info-box">
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 12 19.79 19.79 0 01.22 3.4 2 2 0 012.2 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 9.91a16 16 0 006 6l1.27-.63a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+            <div><div class="contact-label">Phone</div><div class="contact-value">+968 24 492333</div></div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div><div class="contact-label">Address</div><div class="contact-value">18th November Street, Al Azaibah<br>Muscat, Oman</div></div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+            <div><div class="contact-label">Instagram</div><div class="contact-value">@simia_medispa</div></div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div><div class="contact-label">Hours</div><div class="contact-value">Mon–Thu, Sat–Sun<br>10:00 AM – 8:00 PM</div></div>
+          </div>
+        </div>
+        <div style="margin-top:2.5rem;">
+          <button class="btn-primary" style="width:100%;padding:1rem;" onclick="window.open('https://maps.google.com/?q=18th+November+Street+Azaibah+Muscat+Oman','_blank')">Get Directions</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg">
+    <div class="cta-ring" style="width:800px;height:800px;"></div>
+    <div class="cta-ring" style="width:600px;height:600px;"></div>
+    <div class="cta-ring" style="width:400px;height:400px;"></div>
+  </div>
+  <div class="cta-content reveal">
+    <div class="section-eyebrow" style="margin-bottom:1.5rem;">Begin Your Journey</div>
+    <h2 class="cta-title">Ready to <em>transform</em><br>your skin?</h2>
+    <p class="cta-sub">Book a complimentary consultation with our specialists today</p>
+    <a href="tel:+96824492333" class="phone-link">+968 24 492333</a><br>
+    <button class="btn-primary" style="padding:1.1rem 3.5rem;" onclick="window.open('https://www.fresha.com/a/simia-medi-spa-muscat-18th-november-street-fga1ia2c','_blank')">Book Online</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">SIMIA MEDI SPA · سيميا الدولية</div>
+    <div class="footer-tagline">"Where comfort and care converge"</div>
+    <div class="footer-copy">© 2025 Simia Medi Spa · Muscat, Oman</div>
+  </div>
+</footer>
+
+<script>
+// NAV scroll effect
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>60);});
+
+// Mobile menu
+const hamburger=document.getElementById('hamburger');
+const mobileMenu=document.getElementById('mobileMenu');
+hamburger.addEventListener('click',()=>mobileMenu.classList.toggle('open'));
+function closeMobile(){mobileMenu.classList.remove('open');}
+
+// Scroll reveal
+const reveals=document.querySelectorAll('.reveal');
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});
+},{threshold:0.1,rootMargin:'0px 0px -60px 0px'});
+reveals.forEach(r=>io.observe(r));
+
+// 3D particle canvas hero
+const canvas=document.getElementById('heroCanvas');
+const ctx=canvas.getContext('2d');
+let W,H,particles=[],mouse={x:0,y:0};
+
+function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
+resize();
+window.addEventListener('resize',resize);
+
+function Particle(){
+  this.x=Math.random()*W;
+  this.y=Math.random()*H;
+  this.z=Math.random()*2+0.2;
+  this.vx=(Math.random()-0.5)*0.3*this.z;
+  this.vy=(Math.random()-0.5)*0.3*this.z;
+  this.size=Math.random()*1.5*this.z+0.3;
+  this.alpha=Math.random()*0.5+0.1;
+  this.color=Math.random()>0.6?'201,169,110':'245,240,232';
+  this.pulse=Math.random()*Math.PI*2;
+}
+
+for(let i=0;i<160;i++)particles.push(new Particle());
+
+function drawHexGrid(){
+  const s=60;const h=s*Math.sqrt(3)/2;
+  ctx.strokeStyle='rgba(201,169,110,0.04)';ctx.lineWidth=0.5;
+  for(let row=-1;row<H/h+2;row++){
+    for(let col=-1;col<W/(s*1.5)+2;col++){
+      const x=col*s*1.5;const y=row*h*2+(col%2===0?0:h);
+      ctx.beginPath();
+      for(let i=0;i<6;i++){const a=Math.PI/180*(60*i-30);ctx.lineTo(x+s*Math.cos(a),y+s*Math.sin(a));}
+      ctx.closePath();ctx.stroke();
+    }
+  }
+}
+
+function drawConnections(){
+  ctx.lineWidth=0.4;
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const dx=particles[i].x-particles[j].x;const dy=particles[i].y-particles[j].y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<120){
+        const alpha=0.08*(1-dist/120)*Math.min(particles[i].z,particles[j].z);
+        ctx.strokeStyle=`rgba(201,169,110,${alpha})`;
+        ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate(){
+  ctx.clearRect(0,0,W,H);
+  drawHexGrid();
+  particles.forEach(p=>{
+    p.pulse+=0.015;p.x+=p.vx+(mouse.x/W-0.5)*0.05*p.z;p.y+=p.vy+(mouse.y/H-0.5)*0.05*p.z;
+    if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+    const a=p.alpha*(0.7+0.3*Math.sin(p.pulse));
+    ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${p.color},${a})`;ctx.fill();
+  });
+  drawConnections();
+  requestAnimationFrame(animate);
+}
+animate();
+
+window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+window.addEventListener('touchmove',e=>{if(e.touches[0]){mouse.x=e.touches[0].clientX;mouse.y=e.touches[0].clientY;}},{passive:true});
+</script>
+</body>
+</html>
